@@ -13,3 +13,14 @@ struct Venue {
     let address: String
     let coordinate: String
 }
+
+extension Venue {
+    static func mock() -> Venue {
+        Venue(
+            name: "Mayhem",
+            flyers: Array(repeating: 0, count: 20).map({ _ in Flyer.mock() }),
+            address: "Ragnhildvej 1",
+            coordinate: "12, 55"
+        )
+    }
+}
