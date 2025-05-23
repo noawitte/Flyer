@@ -11,18 +11,22 @@ struct FrontPageView: View {
     
     let flyers: [Flyer]
     
+    static let spacing: CGFloat = 3
+    
     let columns = Array(
         repeating: GridItem(
             .flexible(minimum: 100),
-            spacing: 5,
+            spacing: Self.spacing,
             alignment: .center
         ),
         count: 3
     )
     
+    @State var controlBarSize: CGSize = .zero
+    
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: columns, alignment: .leading, spacing: 5, pinnedViews: .sectionHeaders) {
+            LazyVGrid(columns: columns, alignment: .leading, spacing: Self.spacing, pinnedViews: .sectionHeaders) {
                 Section {
                     ForEach(flyers) { flyer in
                         Image(.mayhemFlyer)
@@ -33,8 +37,24 @@ struct FrontPageView: View {
 //                    Text("Mayhem")
                 }
             }
+            .padding(.bottom, controlBarSize.height + 10)
         }
-        .padding(.horizontal, 8)
+        .scrollIndicators(.hidden)
+        .overlay(content: {
+            VStack {
+                Spacer()
+                HStack {
+                    // Not same heights because of different symbols
+                    ControlBar(controls: .leadingControl)
+                    Spacer()
+                    ControlBar(controls: .centerControls)
+                    Spacer()
+                    ControlBar(controls: .trailingControl)
+                }
+                .readSize(to: $controlBarSize)
+                .padding(.horizontal, 10)
+            }
+        })
     }
 }
 

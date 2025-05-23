@@ -15,7 +15,9 @@ struct FlyerApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .background(.background)
                 .environment(client)
+                .colorScheme(.dark)
         }
     }
 }
