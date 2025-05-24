@@ -7,7 +7,27 @@
 
 import SwiftUI
 
+@Observable
+final class ControlBarSettings {
+    var controlBarSize: CGSize = .zero
+    var height: CGFloat {
+        controlBarSize.height
+    }
+}
+
 struct ControlBar: View {
+    var body: some View {
+        HStack {
+            ControlBarSection(controls: .leadingControl)
+            Spacer()
+            ControlBarSection(controls: .centerControls)
+            Spacer()
+            ControlBarSection(controls: .trailingControl)
+        }
+    }
+}
+
+struct ControlBarSection: View {
     let controls: [String]
     
     var singleControl: Bool {

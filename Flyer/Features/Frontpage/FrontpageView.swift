@@ -8,25 +8,15 @@
 import SwiftUI
 
 struct FrontPageView: View {
-    
     let flyers: [Flyer]
     
-    static let spacing: CGFloat = 3
-    
-    let columns = Array(
-        repeating: GridItem(
-            .flexible(minimum: 100),
-            spacing: Self.spacing,
-            alignment: .center
-        ),
-        count: 3
-    )
-    
-    @State var controlBarSize: CGSize = .zero
+    @Environment(ControlBarSettings.self)
+    private var controlBarSettings: ControlBarSettings
+    private let columns = Array(repeating: gridItem, count: 3)
     
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: columns, alignment: .leading, spacing: Self.spacing, pinnedViews: .sectionHeaders) {
+            LazyVGrid(columns: columns, alignment: .leading, spacing: Self.gridSpacing, pinnedViews: .sectionHeaders) {
                 Section {
                     ForEach(flyers) { flyer in
                         Image(.mayhemFlyer)
@@ -34,30 +24,25 @@ struct FrontPageView: View {
                             .aspectRatio(contentMode: .fit)
                     }
                 } header: {
-//                    Text("Mayhem")
+//                    Text("Ma  yhem")
                 }
             }
-            .padding(.bottom, controlBarSize.height + 10)
+            .padding(.bottom, controlBarSettings.height + 10)
         }
         .scrollIndicators(.hidden)
-        .overlay(content: {
-            VStack {
-                Spacer()
-                HStack {
-                    // Not same heights because of different symbols
-                    ControlBar(controls: .leadingControl)
-                    Spacer()
-                    ControlBar(controls: .centerControls)
-                    Spacer()
-                    ControlBar(controls: .trailingControl)
-                }
-                .readSize(to: $controlBarSize)
-                .padding(.horizontal, 10)
-            }
-        })
     }
+}
+
+extension FrontPageView {
+    private static let gridSpacing: CGFloat = 3
+    private static let gridItem = GridItem(
+        .flexible(minimum: 100),
+        spacing: Self.gridSpacing,
+        alignment: .center
+    )
 }
 
 #Preview {
     FrontPageView(flyers: .mock())
 }
+
