@@ -12,7 +12,7 @@ struct EventView: View {
         ZStack {
             ScrollView {
                 VStack {
-                    Image(.mayhemFlyer)
+                    Image(.mayhemFlyer1)
                         .resizable()
                         .scaledToFit()
                         .cornerRadius(5)

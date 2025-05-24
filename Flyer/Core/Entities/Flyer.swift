@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import DeveloperToolsSupport
 
 struct Flyer: Identifiable {
     let id = UUID()
+    let image: ImageResource = .randomFlyer
     let events: [Event]
     //    let imageUrl: URL
 }

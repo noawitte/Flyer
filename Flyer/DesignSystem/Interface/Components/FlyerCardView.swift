@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct FlyerCardView: View {
+    let image: ImageResource
     var body: some View {
         VStack {
-            Image(ImageResource.mayhemFlyer)
+            Image(image)
                 .resizable()
                 .roundedCorners(radius: 3)
                 .aspectRatio(contentMode: .fit)
@@ -21,5 +22,5 @@ struct FlyerCardView: View {
 }
 
 #Preview {
-    FlyerCardView()
+    FlyerCardView(image: .mayhemFlyer1)
 }

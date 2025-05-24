@@ -22,7 +22,7 @@ struct FrontPageView: View {
                     Section {
                         ForEach(flyers) { flyer in
                             NavigationLink {
-                                FlyerCardView()
+                                FlyerCardView(image: flyer.image)
                                     .navigationBarBackButtonHidden()
                                     .navigationTransition(
                                         .zoom(
@@ -31,7 +31,7 @@ struct FrontPageView: View {
                                         )
                                     )
                             } label: {
-                                Image(.mayhemFlyer)
+                                Image(flyer.image)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .matchedTransitionSource(id: flyer.id, in: flyerGrid)
