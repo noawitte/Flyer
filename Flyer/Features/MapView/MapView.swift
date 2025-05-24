@@ -12,16 +12,24 @@ struct MapView: View {
     
     let flyers: [Flyer]
     @State var selectedFlyer: Flyer?
+    
+    @State private var position: MapCameraPosition = .region(.copenhagen())
+    @State private var cameraDistance: CLLocationDistance = 1000
+    
     var body: some View {
-        Map(initialPosition: .region(.copenhagen()), selection: $selectedFlyer) {
+        Map(position: $position, selection: $selectedFlyer) {
             ForEach(flyers) { flyer in
                 Annotation("", coordinate: flyer.coordinate) {
-                    FlyerAnnotation(flyer: flyer)
+                    FlyerAnnotation(flyer: flyer, distance: cameraDistance)
                 }
             }
         }
         .colorScheme(.dark)
         .mapStyle(.style())
+        .onMapCameraChange(frequency: .continuous) { context in
+            cameraDistance = context.camera.distance
+            print(cameraDistance)
+        }
     }
 }
 
@@ -47,13 +55,26 @@ private extension MapStyle {
 
 struct FlyerAnnotation: View {
     let flyer: Flyer
+    let distance: CLLocationDistance
+
     var body: some View {
         Image(flyer.image)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 40)
-            .padding(3)
+            .frame(width: size(for: distance))
+            .padding(2)
             .background(.foreground)
-            .roundedCorners(radius: 4)
+            .roundedCorners(radius: 2)
+    }
+    
+    func size(for distance: CLLocationDistance) -> CGFloat {
+        let minSize: CGFloat = 20
+        let maxSize: CGFloat = 100
+        let maxDistance: CLLocationDistance = 2000
+        let minDistance: CLLocationDistance = 100
+
+        let clampedDistance = max(minDistance, min(maxDistance, distance))
+        let normalized = 1 - (clampedDistance - minDistance) / (maxDistance - minDistance)
+        return minSize + (maxSize - minSize) * normalized
     }
 }
