@@ -8,19 +8,20 @@
 import SwiftUI
 
 extension View {
-    func roundedCorners() -> some View {
-        modifier(RoundedCorners())
+    func roundedCorners(radius: CGFloat? = nil) -> some View {
+        modifier(RoundedCorners(radius: radius))
     }
 }
 
 struct RoundedCorners: ViewModifier {
+    let radius: CGFloat?
     @State var size: CGSize = .zero
     func body(content: Content) -> some View {
         content
             .readSize(to: $size)
-            .frame(minWidth: size.height)
+//            .frame(minWidth: size.height)
             .mask {
-                RoundedRectangle(cornerRadius: size.height / 2)
+                RoundedRectangle(cornerRadius: radius ?? size.height / 2)
             }
     }
     

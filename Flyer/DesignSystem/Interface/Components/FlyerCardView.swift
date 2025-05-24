@@ -9,7 +9,14 @@ import SwiftUI
 
 struct FlyerCardView: View {
     var body: some View {
-        Image(ImageResource.mayhemFlyer)
+        VStack {
+            Image(ImageResource.mayhemFlyer)
+                .resizable()
+                .roundedCorners(radius: 3)
+                .aspectRatio(contentMode: .fit)
+                .padding()
+            Spacer()
+        }
     }
 }
 

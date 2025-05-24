@@ -10,26 +10,42 @@ import SwiftUI
 struct FrontPageView: View {
     let flyers: [Flyer]
     
+    @Namespace private var flyerGrid
     @Environment(ControlBarSettings.self)
     private var controlBarSettings: ControlBarSettings
     private let columns = Array(repeating: gridItem, count: 3)
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, alignment: .leading, spacing: Self.gridSpacing, pinnedViews: .sectionHeaders) {
-                Section {
-                    ForEach(flyers) { flyer in
-                        Image(.mayhemFlyer)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
+        NavigationStack {
+            ScrollView {
+                LazyVGrid(columns: columns, alignment: .leading, spacing: Self.gridSpacing, pinnedViews: .sectionHeaders) {
+                    Section {
+                        ForEach(flyers) { flyer in
+                            NavigationLink {
+                                FlyerCardView()
+                                    .navigationBarBackButtonHidden()
+                                    .navigationTransition(
+                                        .zoom(
+                                            sourceID: flyer.id,
+                                            in: flyerGrid
+                                        )
+                                    )
+                            } label: {
+                                Image(.mayhemFlyer)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .matchedTransitionSource(id: flyer.id, in: flyerGrid)
+                                    .roundedCorners(radius: 2)
+                            }
+                        }
+                    } header: {
+                        //                    Text("Ma  yhem")
                     }
-                } header: {
-//                    Text("Ma  yhem")
                 }
+                .padding(.bottom, controlBarSettings.height + 10)
             }
-            .padding(.bottom, controlBarSettings.height + 10)
+            .scrollIndicators(.hidden)
         }
-        .scrollIndicators(.hidden)
     }
 }
 
@@ -44,5 +60,6 @@ extension FrontPageView {
 
 #Preview {
     FrontPageView(flyers: .mock())
+        .environment(ControlBarSettings())
 }
 
